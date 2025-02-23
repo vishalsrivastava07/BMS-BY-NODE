@@ -1,12 +1,12 @@
 import express from "express";
 import { logging } from "../middleware/logging";
-// import { addBook, deleteBook, getAllBooks, updateBook } from "../controllers/bookController.ts";
+import { addBook, deleteBook, getAllBooks, updateBook } from "../controllers/bookController";
 
 const router = express.Router();
 
 router.use(logging);
 
-router.get("/", getAllBooks);
+router.get("/books", getAllBooks);
 router.post('/addbook', addBook);
 router.delete('/deletebook/:isbn', deleteBook)
 router.put('/updatebook', updateBook)

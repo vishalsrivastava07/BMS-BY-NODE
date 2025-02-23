@@ -1,0 +1,10 @@
+[
+  {
+    "title": "Updated Book Title",
+    "author": "John Doe",
+    "isbn": 1234567890,
+    "publicationDate": "2024-02-24",
+    "genre": "Fiction",
+    "price": 39.99
+  }
+]

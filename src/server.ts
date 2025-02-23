@@ -5,7 +5,7 @@ import bodyParser from 'body-parser';
 
 const app = express();
 dotenv.config()
-const PORT = 3000
+const PORT = 3001
 app.use(express.json({ limit: '1mb' })); 
 app.use(bodyParser.json()); // Parse JSON body
 
@@ -13,5 +13,5 @@ app.use(bodyParser.json()); // Parse JSON body
 app.use('/api/v1', bookRoutes);
 
 app.listen(PORT || 8000, () => {
-    console.log(`🛞  Server is listening on: ${PORT}`);
+    console.log(`Server is listening on: ${PORT}`);
 })

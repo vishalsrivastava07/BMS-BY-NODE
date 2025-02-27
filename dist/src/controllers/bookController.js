@@ -22,17 +22,30 @@ dotenv_1.default.config();
 const getAllBooks = (req, res) => __awaiter(void 0, void 0, void 0, function* () {
     try {
         const filePath = path_1.default.join(__dirname, "../bookData.json");
-        const fileContent = yield fs_1.promises.readFile(filePath, "utf-8");
-        const books = JSON.parse(fileContent);
+        let books = [];
+        try {
+            const fileContent = yield fs_1.promises.readFile(filePath, "utf-8");
+            // Handle empty file case
+            if (fileContent.trim()) {
+                books = JSON.parse(fileContent);
+            }
+        }
+        catch (error) {
+            console.log("Error reading file:", error);
+            // If file doesn't exist, create it with empty array
+            yield fs_1.promises.writeFile(filePath, '[]', 'utf-8');
+        }
         const booksLimit = parseInt(process.env.BOOKS_LIMIT || "10", 10);
         const limitedBooks = books.slice(0, booksLimit);
         return res
             .status(200)
-            .json(new response_1.default(200, limitedBooks, "Books Fetch successfully"));
+            .json(new response_1.default(200, limitedBooks, "Books fetched successfully"));
     }
     catch (error) {
-        console.error("Error reading books data:", error);
-        throw new error_1.default(500, "Internal Server Error");
+        console.error("Error in getAllBooks:", error);
+        return res
+            .status(500)
+            .json(new response_1.default(500, null, "Internal Server Error"));
     }
 });
 exports.getAllBooks = getAllBooks;

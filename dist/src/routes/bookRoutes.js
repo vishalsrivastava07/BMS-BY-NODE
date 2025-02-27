@@ -8,7 +8,7 @@ const logging_1 = require("../middleware/logging");
 const bookController_1 = require("../controllers/bookController");
 const router = express_1.default.Router();
 router.use(logging_1.logging);
-router.get("/", bookController_1.getAllBooks);
+router.get("/books", bookController_1.getAllBooks);
 router.post('/addbook', bookController_1.addBook);
 router.delete('/deletebook/:isbn', bookController_1.deleteBook);
 router.put('/updatebook', bookController_1.updateBook);

@@ -10,9 +10,8 @@ const body_parser_1 = __importDefault(require("body-parser"));
 const app = (0, express_1.default)();
 dotenv_1.default.config();
 const PORT = 3001;
-app.use(express_1.default.json({ limit: '1mb' }));
 app.use(body_parser_1.default.json()); // Parse JSON body
-app.use('/api/v1', bookRoutes_1.default);
+app.use('/api', bookRoutes_1.default);
 app.listen(PORT || 8000, () => {
     console.log(`Server is listening on: ${PORT}`);
 });

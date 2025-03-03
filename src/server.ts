@@ -9,7 +9,7 @@ const PORT = 3001
 app.use(bodyParser.json()); // Parse JSON body
 
 
-app.use('/api', bookRoutes);
+app.use(bookRoutes);
 
 app.listen(PORT || 8000, () => {
     console.log(`Server is listening on: ${PORT}`);

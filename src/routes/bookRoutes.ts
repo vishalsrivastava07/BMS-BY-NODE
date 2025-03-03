@@ -7,7 +7,8 @@ const router = express.Router();
 router.use(logging);
 
 router.get("/books", getAllBooks);
-router.post('/addbook', addBook);
-router.delete('/deletebook/:isbn', deleteBook)
-router.put('/updatebook', updateBook)
+router.post("/books", addBook);
+router.put("/books/:id", updateBook);
+router.delete("/books/:id", deleteBook);
+
 export default router;

@@ -37,7 +37,8 @@ export const getAllBooks: RequestHandler = async (req: Request, res: Response): 
         .status(500)
         .json(new apiResponse(500, null, "Internal Server Error"));
     }
-  };
+};
+
 // Handler to add a new book after ensuring it's unique by ISBN.
 export const addBook: RequestHandler = async (
   req: Request,
@@ -84,8 +85,8 @@ export const addBook: RequestHandler = async (
     await fs.writeFile(filePath, JSON.stringify(fileContent, null, 2), "utf-8");
 
     return res
-      .status(200)
-      .json(new apiResponse(200, newBook, "Book added successfully"));
+      .status(201)
+      .json(new apiResponse(201, newBook, "Book added successfully"));
   } catch (error) {
     console.error("Error while adding book:", error);
     return res.status(500).json({
@@ -94,15 +95,15 @@ export const addBook: RequestHandler = async (
   }
 };
 
-// Handler to delete a book by ISBN
+// Handler to delete a book by ID (previously ISBN)
 export const deleteBook: RequestHandler = async (
   req: Request,
   res: Response
 ): Promise<any> => {
-  const { isbn } = req.params;
+  const { id } = req.params;
 
-  if (!isbn) {
-    throw new apiError(400, "ISBN is required.");
+  if (!id) {
+    throw new apiError(400, "Book ID is required.");
   }
 
   try {
@@ -118,8 +119,8 @@ export const deleteBook: RequestHandler = async (
       throw new apiError(404, "File not found or empty, starting fresh.");
     }
 
-    const isbnNumber = Number(isbn);
-    const bookIndex = fileContent.findIndex((book) => book.isbn === isbnNumber);
+    // Assuming the id parameter is the ISBN
+    const bookIndex = fileContent.findIndex((book) => book.isbn === id);
 
     if (bookIndex !== -1) {
       // If the book exists, delete it from the list
@@ -130,7 +131,7 @@ export const deleteBook: RequestHandler = async (
 
       return res
         .status(200)
-        .json(new apiResponse(200, "", "Book deleted successfully"));
+        .json(new apiResponse(200, null, "Book deleted successfully"));
     } else {
       throw new apiError(404, "Book not found.");
     }
@@ -140,16 +141,18 @@ export const deleteBook: RequestHandler = async (
   }
 };
 
-
-export const updateBook: RequestHandler = async (req: Request, res: Response): Promise<any> => {
+// Handler to update a book by ID (previously ISBN from query parameter)
+export const updateBook: RequestHandler = async (
+  req: Request,
+  res: Response
+): Promise<any> => {
   try {
-    const { isbn } = req.query;
+    const { id } = req.params;
     const { title, author, publicationDate, genre, price } = req.body;
-    const isbnNumber = Number(isbn);
     
-    // Check if ISBN is provided
-    if (!isbn) {
-      throw new apiError(400, "ISBN is required.");
+    // Check if ID is provided
+    if (!id) {
+      throw new apiError(400, "Book ID is required.");
     }
 
     // Define file path to book data
@@ -159,8 +162,8 @@ export const updateBook: RequestHandler = async (req: Request, res: Response): P
     const fileContent = await fs.readFile(filePath, "utf-8");
     let bookData = JSON.parse(fileContent);
 
-    // Find the book by ISBN
-    const bookIndex = bookData.findIndex((book: any) => book.isbn === isbnNumber);
+    // Find the book by ID (assuming ID is ISBN)
+    const bookIndex = bookData.findIndex((book: any) => book.isbn === id);
 
     // If book not found, return a 404 error
     if (bookIndex === -1) {
